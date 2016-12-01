@@ -3,6 +3,8 @@
 const WIDTH = 100;
 const HEIGHT = 100;
 
+// ****************** HELPERS **************************
+
 function twochars(n) {
   if (n < 10) {
     return "0" + n;
@@ -65,6 +67,8 @@ function tester(f) {
   return (x,y) => (f(x,y) ? "black" : "white");
 }
 
+// ****************** PAINTERS **************************
+
 // Each of these is displayed on the page as buttons
 var painters = {
   whitenoise: (x,y) => `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)})`,
@@ -83,6 +87,9 @@ var painters = {
 
 
 };
+
+
+// ****************** DRAWING **************************
 
 // Fill |canvas| calling |func(x,y)| to get the color value of each pixel.
 // Create a stylesheet denoting each pixel's color.
