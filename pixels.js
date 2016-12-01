@@ -52,27 +52,36 @@ function grapher(func, domain, range) {
   };
 }
 
+function distSquared(x1,y1, x2,y2) {
+  var distX = Math.abs(x1-x2), distY = Math.abs(y1-y2);
+  return distX*distX + distY*distY;
+}
+function dist(x1,y1, x2,y2) {
+  return Math.sqrt(distSquared(x1,y1, x2,y2));
+}
+
+// a tester emits black pixels when f(x,y) is true, else white.
+function tester(f) {
+  return (x,y) => (f(x,y) ? "black" : "white");
+}
+
 // Each of these is displayed on the page as buttons
 var painters = {
-  checkerboard: (x, y) => ((x+y) % 2 ? "black" : "white"),
-
   whitenoise: (x,y) => `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)})`,
-
   boring: (x, y) => "#" + twochars(x) + twochars(y) + "00",
 
+  checkerboard: tester((x, y) => (x+y) % 2),
+  concentric: tester( (x,y) => Math.round( dist       (x,y, WIDTH/2,HEIGHT/2) ) % 10 ),
+  // Wow: so different from concentric()!
+  flora:      tester( (x,y) => Math.round( distSquared(x,y, WIDTH/2,HEIGHT/2) ) % 10 ),
+
+  dotty_sin_x: tester( (x,y) => Math.round(Math.sin(x*1.0 / WIDTH*2 * Math.PI) * HEIGHT/2 + (HEIGHT/2)) == y),
   sin_x: grapher(Math.sin, [0, 2*Math.PI], [-1, 1]),
   cos_x: grapher(Math.cos, [0, 2*Math.PI], [-1, 1]),
   tan_x: grapher(Math.tan, [0, 2*Math.PI], [-100, 100]),
   polynomial: grapher((x) => 2*x*x*x-40*x*x-20*x-3, [-50,50], [-10000,10000]),
 
-  dotty_sin_x: function(x, y) {
-    if (Math.round(Math.sin(x*1.0 / WIDTH*2 * Math.PI) * HEIGHT/2 + (HEIGHT/2)) == y) {
-      return "black";
-    }
-    else {
-      return "white";
-    }
-  },
+
 };
 
 // Fill |canvas| calling |func(x,y)| to get the color value of each pixel.
