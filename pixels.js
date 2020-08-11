@@ -71,6 +71,47 @@ function tester(f) {
 
 // Each of these is displayed on the page as buttons
 var painters = {
+  best_one: function(x, y) {
+    if (window.COLORS === undefined) {
+      window.COLORS = [];
+      for (let i = 0; i < WIDTH/2; i++) {
+        window.COLORS[i] = painters.whitenoise(0, 0);
+      }
+    }
+    let distance = Math.round(dist(WIDTH/2, HEIGHT/2, x, y));
+    if (distance < WIDTH / 2) {
+      return window.COLORS[distance];
+    } else {
+      return painters.whitenoise(0,0);
+    }
+  },
+  flood: (x, y) => x < 40 ? "black" : "white",
+  double_square: function(x, y) {
+    if (window.LENGTH === undefined) {
+      window.LENGTH = 0;
+      window.SO_FAR = 0;
+    }
+    if (window.SO_FAR === window.LENGTH) {
+      window.LENGTH += 1;
+      window.SO_FAR = 1;
+      window.LAST_COLOR_PICKED = painters.whitenoise(x, y);
+      return window.LAST_COLOR_PICKED;
+    }
+    else {
+      window.SO_FAR += 1;
+      return window.LAST_COLOR_PICKED;
+    }
+  },
+  two_pixels: function(x, y) {
+    if (window.LAST_COLOR_PICKED !== undefined) {
+      let answer = window.LAST_COLOR_PICKED;
+      window.LAST_COLOR_PICKED = undefined;
+      return answer;
+    } else {
+      window.LAST_COLOR_PICKED = painters.whitenoise(x, y);
+      return window.LAST_COLOR_PICKED;
+    }
+  },
   whitenoise: (x,y) => `rgb(${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)}, ${Math.floor(Math.random() * 255)})`,
   boring: (x, y) => "#" + twochars(x) + twochars(y) + "00",
 
